@@ -14,7 +14,7 @@ A full-stack release checklist application to track and manage software releases
 ### Release Detail Page
 
 <!-- Add your screenshot below -->
-![Release Detail Page](screenshots/release-detail.png)
+![Release Detail Page](screenshots/release-details.png)
 
 ### Create Release Dialog
 
