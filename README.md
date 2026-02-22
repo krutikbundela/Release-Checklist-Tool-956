@@ -40,16 +40,6 @@ A full-stack release checklist application to track and manage software releases
 
 ---
 
-## Features
-
-- 📋 Create, view, edit, and delete releases
-- ✅ 7-step release checklist with auto-computed status (`Planned` → `Ongoing` → `Done`)
-- 📝 Additional remarks / notes per release
-- 🔄 Loading indicators on save and create actions
-- 🎨 Clean, modern UI with purple accent theme
-
----
-
 ## Getting Started
 
 ### Prerequisites
@@ -149,9 +139,3 @@ CREATE TABLE releases (
   created_at TIMESTAMP DEFAULT NOW()
 );
 ```
-
----
-
-## License
-
-MIT

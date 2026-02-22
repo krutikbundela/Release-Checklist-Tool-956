@@ -1,23 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-const API_URL = "http://localhost:5000/api/releases";
-
-export interface Release {
-  id: string;
-  name: string;
-  release_date: string;
-  status: string;
-  steps: boolean[];
-  additional_info: string | null;
-  created_at: string;
-}
-
-interface ReleaseState {
-  releases: Release[];
-  currentRelease: Release | null;
-  loading: boolean;
-  error: string | null;
-}
+import { RELEASES_API_URL } from "../config/api";
+import type {
+  Release,
+  ReleaseState,
+  CreateReleasePayload,
+  UpdateReleasePayload,
+} from "../types/release.types";
 
 const initialState: ReleaseState = {
   releases: [],
@@ -29,15 +17,15 @@ const initialState: ReleaseState = {
 export const fetchReleases = createAsyncThunk(
   "releases/fetchAll",
   async () => {
-    const res = await fetch(API_URL);
+    const res = await fetch(RELEASES_API_URL);
     return (await res.json()) as Release[];
   },
 );
 
 export const createRelease = createAsyncThunk(
   "releases/create",
-  async (data: { name: string; release_date: string; additional_info?: string }) => {
-    const res = await fetch(API_URL, {
+  async (data: CreateReleasePayload) => {
+    const res = await fetch(RELEASES_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -48,20 +36,8 @@ export const createRelease = createAsyncThunk(
 
 export const updateRelease = createAsyncThunk(
   "releases/update",
-  async ({
-    id,
-    name,
-    release_date,
-    steps,
-    additional_info,
-  }: {
-    id: string;
-    name: string;
-    release_date: string;
-    steps: boolean[];
-    additional_info: string;
-  }) => {
-    const res = await fetch(`${API_URL}/${id}`, {
+  async ({ id, name, release_date, steps, additional_info }: UpdateReleasePayload) => {
+    const res = await fetch(`${RELEASES_API_URL}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, release_date, steps, additional_info }),
@@ -73,7 +49,7 @@ export const updateRelease = createAsyncThunk(
 export const deleteRelease = createAsyncThunk(
   "releases/delete",
   async (id: string) => {
-    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    await fetch(`${RELEASES_API_URL}/${id}`, { method: "DELETE" });
     return id;
   },
 );

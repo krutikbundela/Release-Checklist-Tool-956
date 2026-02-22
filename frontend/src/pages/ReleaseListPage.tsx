@@ -8,7 +8,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Paper,
   Table,
   TableBody,
@@ -20,19 +19,13 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import {
-  ViewIcon,
-  DeleteIcon,
-  AddIcon,
-} from "../components/Icons";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { fetchReleases, createRelease, deleteRelease } from "../redux/releaseSlice";
-
-const statusColor: Record<string, "success" | "warning" | "default"> = {
-  done: "success",
-  ongoing: "warning",
-  planned: "default",
-};
+import { statusColorMap } from "../constants/statuses";
+import { formatDate } from "../utils/formatDate";
 
 export default function ReleaseListPage() {
   const dispatch = useAppDispatch();
@@ -60,18 +53,6 @@ export default function ReleaseListPage() {
 
   const handleDelete = async (id: number) => {
     await dispatch(deleteRelease(id));
-  };
-
-  const formatDate = (d: string) => {
-    try {
-      return new Date(d).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    } catch {
-      return d;
-    }
   };
 
   if (loading) {
@@ -158,7 +139,7 @@ export default function ReleaseListPage() {
                   <TableCell sx={{ borderRight: "1px solid #e5e7eb" }}>
                     <Chip
                       label={r.status.charAt(0).toUpperCase() + r.status.slice(1)}
-                      color={statusColor[r.status] || "default"}
+                      color={statusColorMap[r.status] || "default"}
                       size="small"
                       variant="outlined"
                     />
@@ -166,7 +147,7 @@ export default function ReleaseListPage() {
                   <TableCell align="center" sx={{ borderRight: "1px solid #e5e7eb" }}>
                     <Button
                       size="small"
-                      startIcon={<ViewIcon fontSize="small" />}
+                      startIcon={<VisibilityIcon fontSize="small" />}
                       onClick={() => navigate(`/release/${r.id}`)}
                       sx={{ color: "#7c3aed", textTransform: "none", fontWeight: 600 }}
                     >
@@ -176,7 +157,7 @@ export default function ReleaseListPage() {
                   <TableCell align="center">
                     <Button
                       size="small"
-                      startIcon={<DeleteIcon fontSize="small" />}
+                      startIcon={<DeleteOutlineIcon fontSize="small" />}
                       onClick={() => handleDelete(r.id)}
                       sx={{ color: "#7c3aed", textTransform: "none", fontWeight: 600 }}
                     >

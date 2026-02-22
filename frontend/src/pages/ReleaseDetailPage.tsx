@@ -11,26 +11,15 @@ import {
   CircularProgress,
   Breadcrumbs,
 } from "@mui/material";
-import {
-  DeleteIcon,
-  CheckIcon,
-} from "../components/Icons";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CheckIcon from "@mui/icons-material/Check";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   fetchReleases,
   updateRelease,
   deleteRelease,
 } from "../redux/releaseSlice";
-
-const STEP_LABELS = [
-  "All relevant GitHub pull requests have been merged",
-  "CHANGELOG.md files have been updated",
-  "All tests are passing",
-  "Releases in GitHub created",
-  "Deployed in demo",
-  "Tested thoroughly in demo",
-  "Deployed in production",
-];
+import { CHECKLIST_STEPS, DEFAULT_STEPS_COUNT } from "../constants/checklist";
 
 export default function ReleaseDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -56,7 +45,7 @@ export default function ReleaseDetailPage() {
   // Sync local state when release loads
   useEffect(() => {
     if (release) {
-      setSteps(release.steps || new Array(7).fill(false));
+      setSteps(release.steps || new Array(DEFAULT_STEPS_COUNT).fill(false));
       setInfo(release.additional_info || "");
       setName(release.name || "");
       setDate(release.release_date ? release.release_date.split("T")[0] : "");
@@ -137,7 +126,7 @@ export default function ReleaseDetailPage() {
         </Breadcrumbs>
         <Button
           variant="contained"
-          startIcon={<DeleteIcon />}
+          startIcon={<DeleteOutlineIcon />}
           onClick={handleDelete}
           sx={{
             bgcolor: "#7c3aed",
@@ -188,7 +177,7 @@ export default function ReleaseDetailPage() {
 
         {/* Checklist */}
         <Box display="flex" flexDirection="column" gap={0.5}>
-          {STEP_LABELS.map((label, i) => (
+          {CHECKLIST_STEPS.map((label, i) => (
             <FormControlLabel
               key={i}
               control={
